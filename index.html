@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Exit Time Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Work Exit Time Calculator</h1>
+
+    <label for="startTime">Start Time</label>
+    <input type="time" id="startTime" required>
+
+    <label for="lunchStartTime">Lunch Start Time</label>
+    <input type="time" id="lunchStartTime" required>
+
+    <label for="lunchEndTime">Lunch End Time</label>
+    <input type="time" id="lunchEndTime" required>
+
+    <button onclick="calculateExitTime()">Calculate Exit Time</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function calculateExitTime() {
+        const startTime = document.getElementById('startTime').value;
+        const lunchStartTime = document.getElementById('lunchStartTime').value;
+        const lunchEndTime = document.getElementById('lunchEndTime').value;
+
+        if (!startTime || !lunchStartTime || !lunchEndTime) {
+            document.getElementById('result').innerText = "Please fill all the time fields.";
+            return;
+        }
+
+        const workHours = 8 * 60; // 8 hours in minutes
+
+        // Convert times to Date objects for easier manipulation
+        const start = new Date(`1970-01-01T${startTime}:00`);
+        const lunchStart = new Date(`1970-01-01T${lunchStartTime}:00`);
+        const lunchEnd = new Date(`1970-01-01T${lunchEndTime}:00`);
+
+        const lunchDuration = (lunchEnd - lunchStart) / (1000 * 60); // Lunch time in minutes
+        const totalWorkTime = workHours + lunchDuration; // Total minutes including lunch break
+
+        // Calculate end time by adding totalWorkTime to start time
+        const exitTime = new Date(start.getTime() + totalWorkTime * 60000);
+
+        // Format the time to HH:MM
+        const exitTimeString = exitTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        document.getElementById('result').innerText = `You should leave work at: ${exitTimeString}`;
+    }
+</script>
+
+</body>
+</html>
+
